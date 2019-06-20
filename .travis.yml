@@ -5,9 +5,9 @@ language: java
 jdk:
   - openjdk11
 
-install: gradle assemble
+install: ./gradlew assemble
 
-script: gradle check
+script: ./gradlew check
 
 branches:
   only:
