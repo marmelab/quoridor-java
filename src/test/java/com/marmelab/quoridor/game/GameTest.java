@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GameTest {
 
     @Test
-    @DisplayName("Create default game should place pawn in the center of his base line")
+    @DisplayName("Create default game should place the pawn in the center of its base line")
     public void newGamePlacesWellPawn() {
         //Given
         Pawn expected = new Pawn(0, 4);

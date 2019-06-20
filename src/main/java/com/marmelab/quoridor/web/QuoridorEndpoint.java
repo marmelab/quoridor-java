@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("quoridor")
 public class QuoridorEndpoint {
 
-    private Game game1;
+    private Game game;
 
     @GetMapping
     public String getGame(Model model) {
-        if (game1 == null) {
-            game1 = new Game(new Board());
+        if (game == null) {
+            game = new Game(new Board());
         }
-        model.addAttribute("squares", game1.getBoard().getNodes());
-        model.addAttribute("pawn", game1.getPawn());
-
+        model.addAttribute("squares", game.getBoard().getNodes());
+        model.addAttribute("pawn", game.getPawn());
+        // return the name of the thymeleaf template
         return "quoridor";
     }
 

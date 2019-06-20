@@ -12,7 +12,7 @@ public class Game {
 
     public Game(final Board board) {
         this.board = board;
-        this.pawn = new Pawn(new Position(0, (this.board.getBoardSize() - 1 )/ 2));
+        pawn = new Pawn(new Position(0, (this.board.getBoardSize() - 1 )/ 2));
     }
 
     public Board getBoard() {

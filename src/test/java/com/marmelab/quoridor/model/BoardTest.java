@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class BoardTest {
 
     @Test
-    @DisplayName("create default board should throw an exception, the board must contain odd size number")
+    @DisplayName("create default board should throw an exception, the board size must not be an even number")
     void newBoardOddNumber() {
         // When
         Throwable throwable = catchThrowable(() -> new Board(2));
@@ -20,7 +20,7 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("create default board should throw an exception, the board must contain odd size number")
+    @DisplayName("create default board should throw an exception, the board size must be positive")
     void newBoardPositiveNumber() {
         // When
         Throwable throwable = catchThrowable(() -> new Board(-1));

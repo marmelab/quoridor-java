@@ -22,7 +22,7 @@ public class Board {
             throw new IllegalArgumentException("The size must be positive");
         }
         this.boardSize = boardSize;
-        this.nodes = new ArrayList<>();
+        nodes = new ArrayList<>();
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 nodes.add(new Node(new Position(i, j)));
