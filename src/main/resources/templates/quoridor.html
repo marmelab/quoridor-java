@@ -9,8 +9,8 @@
 
 <body>
     <div class="board">
-        <div th:each="square : ${squares}" class="square" th:style="${'top: ' + square.position.y * 40 + 'px; left: ' + square.position.x * 40 + 'px'}"></div>
-        <div class="pawn" th:style="${'top: ' + pawn.position.y * 40 + 'px; left: ' + pawn.position.x * 40 + 'px'}">
+        <div th:each="square : ${squares}" class="square" th:style="${'top: ' + square.row * 40 + 'px; left: ' + square.column * 40 + 'px'}"></div>
+        <div class="pawn" th:style="${'top: ' + pawn.position.row * 40 + 'px; left: ' + pawn.position.column * 40 + 'px'}">
         </div>
     </div>
 </body>

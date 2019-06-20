@@ -1,6 +1,12 @@
 package com.marmelab.quoridor.model;
 
+import com.marmelab.quoridor.graph.GraphFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.traverse.DepthFirstIterator;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Board {
@@ -9,7 +15,7 @@ public class Board {
 
     private final int boardSize;
 
-    private List<Node> nodes;
+    private Graph<Position, DefaultEdge> graph;
 
     public Board() {
         this(DEFAULT_BOARD_SIZE);
@@ -22,20 +28,18 @@ public class Board {
             throw new IllegalArgumentException("The size must be positive");
         }
         this.boardSize = boardSize;
-        nodes = new ArrayList<>();
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                nodes.add(new Node(new Position(i, j)));
-            }
-        }
+        graph = GraphFactory.buildGrid(boardSize);
     }
 
     public int getBoardSize() {
         return boardSize;
     }
 
-    public List<Node> getNodes() {
-        return List.copyOf(nodes);
+    public List<Position> getNodes() {
+        Iterator<Position> iterator = new DepthFirstIterator<>(graph);
+        List<Position> squares = new ArrayList<>();
+        iterator.forEachRemaining(squares::add);
+        return squares;
     }
 
 }
