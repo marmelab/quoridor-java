@@ -1,0 +1,17 @@
+version: '3'
+services:
+    web:
+      working_dir: /quoridor
+      image: gradle:jdk11
+      ports: 
+        - "8080:8080"
+      volumes: 
+        - .:/quoridor
+        - gradle-cache:/quoridor/.gradle-cache 
+      command: "gradle build"
+      user: "${UID}:${GID}"
+      environment: 
+        - GRADLE_USER_HOME=/quoridor/.gradle-cache 
+
+volumes:
+   gradle-cache: {}
