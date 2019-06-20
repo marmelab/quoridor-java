@@ -1,6 +1,4 @@
-# https://travis-ci.com/marmelab/quoridor-python/
-
-sudo: true
+# https://travis-ci.com/marmelab/quoridor-java/
 
 services:
   - docker

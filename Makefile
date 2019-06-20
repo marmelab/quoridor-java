@@ -18,7 +18,7 @@ run: ## build and start the server
 	docker-compose run web gradle build bootRun
 
 test: ## Run the tests
-	docker-compose run web gradle test --stacktrace
+	docker-compose run web gradle test
 
 coverage: ## Calculate the code coverage
 	docker-compose run web gradle jacocoTestReport
