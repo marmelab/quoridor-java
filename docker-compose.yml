@@ -1,0 +1,17 @@
+version: '3'
+services:
+    web:
+      working_dir: /app
+      image: gradle:jdk11
+      ports: 
+        - "8080:8080"
+      volumes: 
+        - .:/app
+        - gradle-cache:/home/gradle/.gradle
+      command: "gradle build"
+      user: "${UID}:${GID}"
+      environment: 
+        - GRADLE_USER_HOME=/home/gradle/.gradle
+
+volumes:
+   gradle-cache: {}

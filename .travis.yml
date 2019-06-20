@@ -1,0 +1,17 @@
+# https://travis-ci.com/marmelab/quoridor-python/
+
+language: java
+
+jdk:
+  - openjdk11
+
+services:
+  - docker
+
+install: make build
+
+script: make test
+
+branches:
+  only:
+    - master
