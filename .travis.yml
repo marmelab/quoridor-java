@@ -1,9 +1,6 @@
 # https://travis-ci.com/marmelab/quoridor-python/
 
-language: java
-
-jdk:
-  - openjdk11
+sudo: true
 
 services:
   - docker
