@@ -1,5 +1,6 @@
 package com.marmelab.quoridor.model;
 
+import com.marmelab.quoridor.game.Fence;
 import com.marmelab.quoridor.graph.GraphFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -40,6 +41,71 @@ public class Board {
         List<Position> squares = new ArrayList<>();
         iterator.forEachRemaining(squares::add);
         return squares;
+    }
+
+    public void addFence(final Fence fence) {
+        final TileFence tileFence = new TileFence(fence.getNorthwestTile());
+        final Position northwestTile = tileFence.getNorthwestTile();
+        final Position northeastTile = tileFence.getNortheastTile();
+        final Position southwestTile = tileFence.getSouthwestTile();
+        final Position southeastTile = tileFence.getSoutheastTile();
+
+        if (fence.isHorizontal()) {
+            if (!hasVerticalFence(tileFence)) {
+                graph.removeEdge(northwestTile, southwestTile);
+                graph.removeEdge(northeastTile, southeastTile);
+            }
+        } else {
+            if (!hasHorizontalFence(tileFence)) {
+                graph.removeEdge(northwestTile, northeastTile);
+                graph.removeEdge(southwestTile, southeastTile);
+
+            }
+        }
+    }
+
+    private boolean hasVerticalFence(final TileFence tileFence) {
+        final Position northwestTile = tileFence.getNorthwestTile();
+        final Position northeastTile = tileFence.getNortheastTile();
+        final Position southwestTile = tileFence.getSouthwestTile();
+        final Position southeastTile = tileFence.getSoutheastTile();
+        return !graph.containsEdge(northwestTile, northeastTile)
+                && !graph.containsEdge(southwestTile, southeastTile);
+    }
+
+    private boolean hasHorizontalFence(final TileFence tileFence) {
+        final Position northwestTile = tileFence.getNorthwestTile();
+        final Position northeastTile = tileFence.getNortheastTile();
+        final Position southwestTile = tileFence.getSouthwestTile();
+        final Position southeastTile = tileFence.getSoutheastTile();
+        return !graph.containsEdge(northwestTile, southwestTile)
+                && !graph.containsEdge(northeastTile, southeastTile);
+    }
+
+    public List<Fence> getFences() {
+        List<Fence> fences = new ArrayList<>();
+        for (int column = 0; column < boardSize -1; column++) {
+            for (int row = 0; row < boardSize -1; row++) {
+                final TileFence tileFence = new TileFence(new Position(column, row));
+                final Position northwestTile = tileFence.getNorthwestTile();
+                if (hasVerticalFence(tileFence)) {
+                    final Fence fence = new Fence(northwestTile, false);
+                    final Fence upFence = new Fence(fence);
+                    upFence.getNorthwestTile().translateRow(-1);
+                    if (!fences.contains(upFence))  {
+                        fences.add(fence);
+                    }
+                 } else if (hasHorizontalFence(tileFence)) {
+                    final Fence fence = new Fence(northwestTile, true);
+                    final Fence leftFence = new Fence(fence);
+                    leftFence.getNorthwestTile().translateColumn( -1);
+                    if (!fences.contains(leftFence))  {
+                        fences.add(fence);
+                    }
+                }
+            }
+        }
+        return fences;
     }
 
 }

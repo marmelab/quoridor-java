@@ -1,5 +1,8 @@
 package com.marmelab.quoridor.web;
 
+import com.marmelab.quoridor.game.Fence;
+import com.marmelab.quoridor.model.Position;
+
 public class FenceForm {
 
     private int row;
@@ -30,6 +33,10 @@ public class FenceForm {
 
     public void setHorizontal(boolean horizontal) {
         this.horizontal = horizontal;
+    }
+
+    public Fence toFence() {
+        return new Fence(new Position(column, row), horizontal);
     }
 
 }

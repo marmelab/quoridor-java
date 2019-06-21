@@ -22,8 +22,23 @@
     box-sizing: border-box;
 }
 
+.fence {
+    position: absolute;
+    background-color: #CD853F;
+}
+
+.horizontal-fence {
+    width: 70px;
+    height: 10px;
+}
+
+.vertical-fence {
+    width: 10px;
+    height: 70px;
+}
+
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
     border: none;
     text-align: center;
     text-decoration: none;
@@ -41,27 +56,27 @@
     padding: 5px 35px;
 }
 
-.fence {
+.add-fence {
     position: absolute;
     opacity: 0;
 }
 
-.horizontal-fence {
+.add-horizontal-fence {
     width: 35px;
     height: 10px;
 }
 
-.vertical-fence {
+.add-vertical-fence {
     width: 10px;
     height: 35px;
 }
 
-.fence:hover .button {
+.add-fence:hover .button {
     display: inline-block;
 }
 
-.fence:hover {
-    background-color: #4CAF50; /* Green */
+.add-fence:hover {
+    background-color: #4CAF50;
     opacity: 1;
     transition: opacity ease-in-out 500ms;
 }

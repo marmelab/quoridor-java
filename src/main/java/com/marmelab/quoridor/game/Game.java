@@ -23,4 +23,8 @@ public class Game {
         return pawn;
     }
 
+    public void addFence(final Fence fence) {
+        board.addFence(fence);
+    }
+
 }
