@@ -37,6 +37,17 @@
     height: 70px;
 }
 
+.game button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
 .button {
     background-color: #4CAF50;
     border: none;
@@ -93,4 +104,10 @@
 .form-fence button {
     top: 0;
     position: absolute;
+}
+
+.game {
+    position: absolute;
+    top: 0px;
+    left: 50px;
 }

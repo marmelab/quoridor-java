@@ -62,6 +62,12 @@ public class QuoridorEndpoint {
         return "quoridor";
     }
 
+    @PostMapping
+    public String newGame() {
+        game = new Game(new Board());
+        return "redirect:/quoridor";
+    }
+
     @PostMapping("add-fence")
     public String addFence(final FenceForm fence) {
         if (game != null) {

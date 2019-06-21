@@ -3,11 +3,17 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Welcome</title>
+    <title>Welcome to Quoridor</title>
     <link rel="stylesheet" type="text/css" th:href="@{/quoridor.css}" />
 </head>
 
 <body>
+    <div class="game">
+        <form method="post" action="/quoridor">
+            <button type="submit">New game</button>
+        </form>
+    </div>
+
     <div class="board"
         th:with="delta=${40}, squareSize=${30}">
         <div th:each="square : ${squares}" class="square"
