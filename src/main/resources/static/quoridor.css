@@ -9,13 +9,73 @@
     border: 1px solid;
     width: 30px;
     height: 30px;
+    box-sizing: border-box;
 }
 
 .pawn {
     position: absolute;
     width: 0;
     height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 30px solid red;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 24px solid red;
+    box-sizing: border-box;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color ease-in-out 500ms;
+}
+
+.vertical-button {
+    padding: 35px 5px;
+}
+
+.horizontal-button {
+    padding: 5px 35px;
+}
+
+.fence {
+    position: absolute;
+    opacity: 0;
+}
+
+.horizontal-fence {
+    width: 35px;
+    height: 10px;
+}
+
+.vertical-fence {
+    width: 10px;
+    height: 35px;
+}
+
+.fence:hover .button {
+    display: inline-block;
+}
+
+.fence:hover {
+    background-color: #4CAF50; /* Green */
+    opacity: 1;
+    transition: opacity ease-in-out 500ms;
+}
+
+.form-fence {
+    position: relative;
+} 
+
+.form-fence input {
+    top: 0;
+    position: absolute;
+}
+
+.form-fence button {
+    top: 0;
+    position: absolute;
 }
