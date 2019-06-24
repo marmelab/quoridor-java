@@ -31,4 +31,11 @@ public class Pawn {
         return Objects.hash(position);
     }
 
+    @Override
+    public String toString() {
+        return "Pawn{" +
+                "position=" + position +
+                '}';
+    }
+
 }

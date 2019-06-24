@@ -111,3 +111,31 @@
     top: 0px;
     left: 50px;
 }
+
+.move-square {
+    position: absolute;
+    opacity: 0;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.move-square:hover {
+    background-color: #4CAF50;
+    opacity: 1;
+    transition: opacity ease-in-out 500ms;
+}
+
+.move-square {
+    position: absolute;
+    opacity: 0;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.move-square:hover {
+    background-color: #4CAF50;
+    opacity: 1;
+    transition: opacity ease-in-out 500ms;
+}

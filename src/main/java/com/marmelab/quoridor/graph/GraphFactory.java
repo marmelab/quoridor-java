@@ -14,9 +14,9 @@ public class GraphFactory {
     }
 
     public static Graph<Position, DefaultEdge> buildGrid(int boardSize) {
-        PositionSupplier supplier = new PositionSupplier(boardSize);
-        Graph<Position, DefaultEdge> graph = new SimpleGraph<>(supplier, SupplierUtil.createDefaultEdgeSupplier(), false);
-        GridGraphGenerator<Position, DefaultEdge> gridGenerator = new GridGraphGenerator<>(boardSize, boardSize);
+        final PositionSupplier supplier = new PositionSupplier(boardSize);
+        final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(supplier, SupplierUtil.createDefaultEdgeSupplier(), false);
+        final GridGraphGenerator<Position, DefaultEdge> gridGenerator = new GridGraphGenerator<>(boardSize, boardSize);
         gridGenerator.generateGraph(graph);
         return graph;
     }

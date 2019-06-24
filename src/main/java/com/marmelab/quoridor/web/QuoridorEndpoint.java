@@ -26,6 +26,7 @@ public class QuoridorEndpoint {
         }
         final BoardView view = new BoardView(game);
         model.addAttribute("squares", view.getSquares());
+        model.addAttribute("possibleMoves", view.getPossibleMoves());
         model.addAttribute("pawn", view.getPawn());
         model.addAttribute("verticalFences", view.getVerticalFences());
         model.addAttribute("horizontalFences", view.getHorizontalFences());
@@ -46,6 +47,15 @@ public class QuoridorEndpoint {
         final Game game = gameService.getGame();
         if (game != null) {
             game.addFence(fence.toFence());
+        }
+        return "redirect:/quoridor";
+    }
+
+    @PostMapping("move-pawn")
+    public String movePawn(final MoveForm move) {
+        final Game game = gameService.getGame();
+        if (game != null) {
+            game.movePawn(move.getDirection());
         }
         return "redirect:/quoridor";
     }

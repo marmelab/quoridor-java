@@ -18,7 +18,15 @@
         th:with="delta=${40}, squareSize=${30}">
         <div th:each="square : ${squares}" class="square"
             th:style="${'top: ' + square.row * delta + 'px; left: ' + square.column * delta + 'px'}"></div>
-        
+
+        <div th:each="instance : ${possibleMoves}" class="square move-square"
+             th:style="${'top: ' + instance.key.row * delta + 'px; left: ' + instance.key.column * delta + 'px'}">
+            <form method="post" action="/quoridor/move-pawn">
+                <input type="hidden" name="direction" th:value="*{instance.value}">
+                <button type="submit" class="button move-square"></button>
+            </form>
+        </div>
+
         <div class="pawn"
             th:with="pos_x=${pawn.position.row * delta + 3}, pos_y=${pawn.position.column * delta + 3}"
             th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">

@@ -31,7 +31,7 @@ public class Game {
     public Game(final Board board) {
         this.board = board;
         int boardSize = this.board.getBoardSize();
-        pawn = new Pawn(new Position(0, (boardSize - 1 )/ 2));
+        pawn = new Pawn(new Position(0, (boardSize - 1) / 2));
         graph = GraphFactory.buildGrid(boardSize);
         fences = new ArrayList<>();
     }
@@ -132,6 +132,36 @@ public class Game {
             row++;
         }
         return crossable;
+    }
+
+    public void movePawn(final CardinalDirection direction) {
+        switch (direction) {
+            case NORTH:
+                move(0, -1);
+                break;
+            case EAST:
+                move(1, 0);
+                break;
+            case SOUTH:
+                move(0, 1);
+                break;
+            case WEST:
+                move(-1, 0);
+                break;
+        }
+    }
+
+    private boolean canMove(final int position, final int row) {
+        int newRow = position + row;
+        return newRow >= 0 && newRow < board.getBoardSize();
+    }
+
+    private void move(int column, int row) {
+        final Position position = pawn.getPosition();
+        if (canMove(position.getColumn(), column) && canMove(position.getRow(), row)) {
+            position.translateColumn(column);
+            position.translateRow(row);
+        }
     }
 
 }

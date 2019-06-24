@@ -1,11 +1,11 @@
 package com.marmelab.quoridor.web;
 
-import com.marmelab.quoridor.model.Fence;
+import com.marmelab.quoridor.model.*;
 import com.marmelab.quoridor.game.Game;
-import com.marmelab.quoridor.model.Pawn;
-import com.marmelab.quoridor.model.Position;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BoardView {
@@ -21,6 +21,8 @@ public class BoardView {
     private final List<Fence> addHorizontalFences;
 
     private final List<Fence> addVerticalFences;
+
+    private final Map<Position, CardinalDirection> possibleMoves;
 
     public BoardView(final Game game) {
         pawn = game.getPawn();
@@ -38,6 +40,40 @@ public class BoardView {
 
         addHorizontalFences = availableNewFence.getAddHorizontalFences();
         addVerticalFences = availableNewFence.getAddVerticalFences();
+
+        possibleMoves = buildPossibleMoves(game.getBoard().getBoardSize());
+        squares.removeAll(possibleMoves.entrySet());
+    }
+
+    private Map<Position, CardinalDirection> buildPossibleMoves(final int boardSize) {
+        Map<Position, CardinalDirection> possiblePositions = new HashMap<>();
+        final Position position = pawn.getPosition();
+        final PositionTile positionTile = new PositionTile(position);
+        final Position northPosition = positionTile.getNorthPosition();
+        if (isInsideBoard(northPosition, boardSize)) {
+            possiblePositions.put(northPosition, CardinalDirection.NORTH);
+        }
+        final Position eastPosition = positionTile.getEastPosition();
+        if (isInsideBoard(eastPosition, boardSize)) {
+            possiblePositions.put(eastPosition, CardinalDirection.EAST);
+        }
+        final Position southPosition = positionTile.getSouthPosition();
+        if (isInsideBoard(southPosition, boardSize)) {
+            possiblePositions.put(southPosition, CardinalDirection.SOUTH);
+        }
+        final Position westPosition = positionTile.getWestPosition();
+        if (isInsideBoard(westPosition, boardSize)) {
+            possiblePositions.put(westPosition, CardinalDirection.WEST);
+        }
+        return possiblePositions;
+    }
+
+    private boolean isInsideBoard(final Position position, final int boardSize) {
+        return isInsideBoardSize(position.getColumn(), boardSize) && isInsideBoardSize(position.getRow(), boardSize);
+    }
+
+    private boolean isInsideBoardSize(final int position, final int boardSize) {
+        return position >= 0 && position < boardSize;
     }
 
     public Pawn getPawn() {
@@ -62,6 +98,10 @@ public class BoardView {
 
     public List<Fence> getAddVerticalFences() {
         return addVerticalFences;
+    }
+
+    public Map<Position, CardinalDirection> getPossibleMoves() {
+        return possibleMoves;
     }
 
 }
