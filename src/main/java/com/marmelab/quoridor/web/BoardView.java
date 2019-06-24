@@ -24,9 +24,9 @@ public class BoardView {
 
     public BoardView(final Game game) {
         pawn = game.getPawn();
-        squares = game.getBoard().getSquares();
+        squares = game.getSquares();
 
-        final List<Fence> fences = game.getBoard().getFences();
+        final List<Fence> fences = game.getFences();
 
         verticalFences = fences.stream()
                 .filter(fence -> !fence.isHorizontal())
