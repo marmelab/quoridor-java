@@ -31,7 +31,7 @@ public class Game {
     public Game(final Board board) {
         this.board = board;
         int boardSize = this.board.getBoardSize();
-        pawn = new Pawn(new Position(0, (boardSize - 1 )/ 2));
+        pawn = new Pawn(new Position(0, (boardSize - 1) / 2));
         graph = GraphFactory.buildGrid(boardSize);
         fences = new ArrayList<>();
     }
@@ -135,18 +135,18 @@ public class Game {
     }
 
     public void movePawn(final CardinalDirection direction) {
-         switch (direction) {
+        switch (direction) {
             case NORTH:
-                moveNorth();
+                move(0, -1);
                 break;
             case EAST:
-               moveEast();
+                move(1, 0);
                 break;
             case SOUTH:
-                moveSouth();
+                move(0, 1);
                 break;
             case WEST:
-                moveWest();
+                move(-1, 0);
                 break;
         }
     }
@@ -156,31 +156,11 @@ public class Game {
         return newRow >= 0 && newRow < board.getBoardSize();
     }
 
-    private void moveNorth() {
+    private void move(int column, int row) {
         final Position position = pawn.getPosition();
-        if (canMove(position.getRow(), -1)) {
-            position.translateRow(-1);
-        }
-    }
-
-    private void moveEast() {
-        final Position position = pawn.getPosition();
-        if (canMove(position.getColumn(), 1)) {
-            position.translateColumn(1);
-        }
-    }
-
-    private void moveSouth() {
-        final Position position = pawn.getPosition();
-        if (canMove(position.getRow(), 1)) {
-            position.translateRow(1);
-        }
-    }
-
-    private void moveWest() {
-        final Position position = pawn.getPosition();
-        if (canMove(position.getColumn(), -1)) {
-            position.translateColumn(-1);
+        if (canMove(position.getColumn(), column) && canMove(position.getRow(), row)) {
+            position.translateColumn(column);
+            position.translateRow(row);
         }
     }
 
