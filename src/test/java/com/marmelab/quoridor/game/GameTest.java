@@ -1,9 +1,6 @@
 package com.marmelab.quoridor.game;
 
-import com.marmelab.quoridor.model.Board;
-import com.marmelab.quoridor.model.Fence;
-import com.marmelab.quoridor.model.Pawn;
-import com.marmelab.quoridor.model.Position;
+import com.marmelab.quoridor.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -237,6 +234,86 @@ public class GameTest {
         List<Fence> fences = game.getFences();
         assertThat(fences).containsExactlyInAnyOrder(
                 new Fence(0, 0, false));
+    }
+
+    @Test
+    @DisplayName("move east pawn should place the pawn in the column on the right")
+    public void moveEastPawnPlacesWellPawn() {
+        //Given
+        Pawn expected = new Pawn(1, 4);
+        Board board = new Board();
+        Game game = new Game(board);
+        //When
+        game.movePawn(CardinalDirection.EAST);
+        //Then
+        assertThat(game.getPawn()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("move north pawn should place the pawn in the row on the top")
+    public void moveNorthPawnPlacesWellPawn() {
+        //Given
+        Pawn expected = new Pawn(0, 3);
+        Board board = new Board();
+        Game game = new Game(board);
+        //When
+        game.movePawn(CardinalDirection.NORTH);
+        //Then
+        assertThat(game.getPawn()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("move south pawn should place the pawn down in the row on the bottom")
+    public void moveSouthPawnPlacesWellPawn() {
+        //Given
+        Pawn expected = new Pawn(0, 5);
+        Board board = new Board();
+        Game game = new Game(board);
+        //When
+        game.movePawn(CardinalDirection.SOUTH);
+        //Then
+        assertThat(game.getPawn()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("move south pawn should place the pawn down in the row on the bottom")
+    public void moveWestPawnPlacesWellPawn() {
+        //Given
+        Pawn expected = new Pawn(0, 4);
+        Board board = new Board();
+        Game game = new Game(board);
+        game.movePawn(CardinalDirection.EAST);
+        //When
+        game.movePawn(CardinalDirection.WEST);
+        //Then
+        assertThat(game.getPawn()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("move pawn in a forbidden direction should not move pawn")
+    public void moveForbiddenPawnPlacesNoMove() {
+        //Given
+        Pawn expected = new Pawn(0, 4);
+        Board board = new Board();
+        Game game = new Game(board);
+        //When
+        game.movePawn(CardinalDirection.WEST);
+        //Then
+        assertThat(game.getPawn()).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("move pawn should cross fences")
+    public void movePawnCrossFence() {
+        //Given
+        Pawn expected = new Pawn(1, 4);
+        Board board = new Board();
+        Game game = new Game(board);
+        game.addFence(new Fence(0, 4, false));
+        //When
+        game.movePawn(CardinalDirection.EAST);
+        //Then
+        assertThat(game.getPawn()).isEqualTo(expected);
     }
 
 }

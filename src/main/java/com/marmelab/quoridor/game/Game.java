@@ -134,4 +134,54 @@ public class Game {
         return crossable;
     }
 
+    public void movePawn(final CardinalDirection direction) {
+         switch (direction) {
+            case NORTH:
+                moveNorth();
+                break;
+            case EAST:
+               moveEast();
+                break;
+            case SOUTH:
+                moveSouth();
+                break;
+            case WEST:
+                moveWest();
+                break;
+        }
+    }
+
+    private boolean canMove(final int position, final int row) {
+        int newRow = position + row;
+        return newRow >= 0 && newRow < board.getBoardSize();
+    }
+
+    private void moveNorth() {
+        final Position position = pawn.getPosition();
+        if (canMove(position.getRow(), -1)) {
+            position.translateRow(-1);
+        }
+    }
+
+    private void moveEast() {
+        final Position position = pawn.getPosition();
+        if (canMove(position.getColumn(), 1)) {
+            position.translateColumn(1);
+        }
+    }
+
+    private void moveSouth() {
+        final Position position = pawn.getPosition();
+        if (canMove(position.getRow(), 1)) {
+            position.translateRow(1);
+        }
+    }
+
+    private void moveWest() {
+        final Position position = pawn.getPosition();
+        if (canMove(position.getColumn(), -1)) {
+            position.translateColumn(-1);
+        }
+    }
+
 }
