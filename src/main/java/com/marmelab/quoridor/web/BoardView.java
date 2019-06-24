@@ -24,7 +24,7 @@ public class BoardView {
 
     public BoardView(final Game game) {
         pawn = game.getPawn();
-        squares = game.getBoard().getNodes();
+        squares = game.getBoard().getSquares();
 
         final List<Fence> fences = game.getBoard().getFences();
 
@@ -34,10 +34,10 @@ public class BoardView {
         horizontalFences = fences.stream()
                 .filter(Fence::isHorizontal)
                 .collect(Collectors.toList());
-        AddFence addFence = new AddFence(game.getBoard().getBoardSize(), horizontalFences, verticalFences);
+        AvailableNewFence availableNewFence = new AvailableNewFence(game.getBoard().getBoardSize(), horizontalFences, verticalFences);
 
-        addHorizontalFences = addFence.getAddHorizontalFences();
-        addVerticalFences = addFence.getAddVerticalFences();
+        addHorizontalFences = availableNewFence.getAddHorizontalFences();
+        addVerticalFences = availableNewFence.getAddVerticalFences();
     }
 
     public Pawn getPawn() {

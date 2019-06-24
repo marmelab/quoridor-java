@@ -1,6 +1,6 @@
 package com.marmelab.quoridor.model;
 
-public class TileFence {
+public class FenceBlock {
 
     private final Position northwestTile;
 
@@ -10,7 +10,7 @@ public class TileFence {
 
     private final Position southeastTile;
 
-    public TileFence(final Position northwestTile) {
+    public FenceBlock(final Position northwestTile) {
         this.northwestTile = northwestTile;
 
         northeastTile = new Position(northwestTile);

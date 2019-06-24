@@ -1,7 +1,6 @@
 package com.marmelab.quoridor.model;
 
 import com.marmelab.quoridor.game.Fence;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,6 @@ public class BoardTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("The size must be positive");
     }
-
 
     @Test
     @DisplayName("by default, no fences are on the board")
@@ -146,7 +144,7 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("It should not be possible to add a horizontal fence one vertical fence")
+    @DisplayName("It should not be possible to add an horizontal fence one vertical fence")
     void addFenceNotPossibleHorizontalFenceOnVerticalFence() {
         // Given
         Board board = new Board(5);
@@ -160,8 +158,7 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("It should not be possible to add a vertical fence before a vertical fence")
-    @Disabled
+    @DisplayName("It should not be possible to add an vertical fence before a vertical fence")
     void addFenceNotPossibleVerticalFenceBeforeVerticalFence() {
         // Given
         Board board = new Board(5);
@@ -175,8 +172,7 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("It should not be possible to add a horizontal fence before a horizontal fence")
-    @Disabled
+    @DisplayName("It should not be possible to add an horizontal fence before a horizontal fence")
     void addFenceNotPossibleHorizontalFenceBeforeHorizontalFence() {
         // Given
         Board board = new Board(5);
@@ -187,6 +183,40 @@ public class BoardTest {
         List<Fence> fences = board.getFences();
         assertThat(fences).containsExactlyInAnyOrder(
                 new Fence(1, 0, true));
+    }
+
+    @Test
+    @DisplayName("It should be possible to add a vertical fence between two horizontal fences")
+    void addFenceBetweenTwoHorizontalFences() {
+        // Given
+        Board board = new Board(5);
+        board.addFence(new Fence(0, 0, true));
+        board.addFence(new Fence(2, 0, true));
+        // When
+        board.addFence(new Fence(1, 0, false));
+        // Then
+        List<Fence> fences = board.getFences();
+        assertThat(fences).containsExactlyInAnyOrder(
+                new Fence(0, 0, true),
+                new Fence(2, 0, true),
+                new Fence(1, 0, false));
+    }
+
+    @Test
+    @DisplayName("It should not be possible to add an horizontal fence between two vertical fences")
+    void addFenceBetweenTwoVerticalFences() {
+        // Given
+        Board board = new Board(5);
+        board.addFence(new Fence(0, 0, false));
+        board.addFence(new Fence(0, 2, false));
+        // When
+        board.addFence(new Fence(0, 1, true));
+        // Then
+        List<Fence> fences = board.getFences();
+        assertThat(fences).containsExactlyInAnyOrder(
+                new Fence(0, 0, false),
+                new Fence(0, 2, false),
+                new Fence(0, 1, true));
     }
 
 }

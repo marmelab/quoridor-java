@@ -1,22 +1,28 @@
 package com.marmelab.quoridor.web;
 
 import com.marmelab.quoridor.game.Fence;
-import com.marmelab.quoridor.model.Position;
+import com.marmelab.quoridor.model.PositionTile;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AddFence {
+public class AvailableNewFence {
 
     private final List<Fence> addHorizontalFences;
 
     private final List<Fence> addVerticalFences;
 
-    public AddFence(int boardSize, List<Fence> horizontalFences, List<Fence> verticalFences) {
+    public AvailableNewFence(final int boardSize, final List<Fence> horizontalFences, final List<Fence> verticalFences) {
         addHorizontalFences = new ArrayList<>();
         addVerticalFences = new ArrayList<>();
+        addAllPossibilities(boardSize);
+        removeHorizontalFences(horizontalFences);
+        removeVerticalFences(verticalFences);
+    }
+
+    private void addAllPossibilities(int boardSize) {
         int numberOfIntersections = boardSize - 1;
         for (int i = 0; i < numberOfIntersections; i++) {
             for (int j = 0; j < numberOfIntersections; j++) {
@@ -24,45 +30,44 @@ public class AddFence {
                 addVerticalFences.add(new Fence(i, j, false));
             }
         }
+    }
 
+    private void removeHorizontalFences(final List<Fence> horizontalFences) {
         Set<Fence> removeVerticalFences = new HashSet<>();
         Set<Fence> removeHorizontalFences = new HashSet<>();
         for (Fence fence : horizontalFences) {
             if (addHorizontalFences.contains(fence)) {
                 removeHorizontalFences.add(fence);
-                final Position rightPosition = new Position(fence.getNorthwestTile());
-                rightPosition.translateColumn(-1);
-                final Fence rightFence = new Fence(rightPosition, true);
+                final PositionTile positionTile = new PositionTile(fence.getNorthwestTile());
+                final Fence rightFence = new Fence(positionTile.getWestPosition(), true);
                 removeHorizontalFences.add(rightFence);
-                final Position leftPosition = new Position(fence.getNorthwestTile());
-                leftPosition.translateColumn(1);
-                Fence leftFence = new Fence(leftPosition, true);
+                final Fence leftFence = new Fence(positionTile.getEastPosition(), true);
                 removeHorizontalFences.add(leftFence);
-
-                Fence otherFence = new Fence(fence.getNorthwestTile(), false);
-                removeVerticalFences.add(otherFence);
-            }
-        }
-        for (Fence fence : verticalFences) {
-            if (addVerticalFences.contains(fence)) {
-                removeVerticalFences.add(fence);
-                final Position upPosition = new Position(fence.getNorthwestTile());
-                upPosition.translateRow(-1);
-                Fence upFence = new Fence(upPosition, false);
-                removeVerticalFences.add(upFence);
-
-                Position downPosition = new Position(fence.getNorthwestTile());
-                downPosition.translateRow(1);
-                Fence downFence = new Fence(downPosition, false);
-                removeVerticalFences.add(downFence);
-
-                Fence otherFence = new Fence(fence.getNorthwestTile(), true);
-                removeHorizontalFences.add(otherFence);
+                final Fence oppositeFence = new Fence(fence.getNorthwestTile(), false);
+                removeVerticalFences.add(oppositeFence);
             }
         }
         addHorizontalFences.removeAll(removeHorizontalFences);
         addVerticalFences.removeAll(removeVerticalFences);
+    }
 
+    private void removeVerticalFences(final List<Fence> verticalFences) {
+        Set<Fence> removeVerticalFences = new HashSet<>();
+        Set<Fence> removeHorizontalFences = new HashSet<>();
+        for (Fence fence : verticalFences) {
+            if (addVerticalFences.contains(fence)) {
+                removeVerticalFences.add(fence);
+                final PositionTile positionTile = new PositionTile(fence.getNorthwestTile());
+                final Fence upFence = new Fence(positionTile.getNorthPosition(), false);
+                removeVerticalFences.add(upFence);
+                final Fence downFence = new Fence(positionTile.getSouthPosition(), false);
+                removeVerticalFences.add(downFence);
+                final Fence oppositeFence = new Fence(fence.getNorthwestTile(), true);
+                removeHorizontalFences.add(oppositeFence);
+            }
+        }
+        addHorizontalFences.removeAll(removeHorizontalFences);
+        addVerticalFences.removeAll(removeVerticalFences);
     }
 
     public List<Fence> getAddHorizontalFences() {
