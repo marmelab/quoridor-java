@@ -1,6 +1,6 @@
 package com.marmelab.quoridor.web;
 
-import com.marmelab.quoridor.game.Fence;
+import com.marmelab.quoridor.model.Fence;
 import com.marmelab.quoridor.game.Game;
 import com.marmelab.quoridor.model.Pawn;
 import com.marmelab.quoridor.model.Position;
@@ -24,9 +24,9 @@ public class BoardView {
 
     public BoardView(final Game game) {
         pawn = game.getPawn();
-        squares = game.getBoard().getSquares();
+        squares = game.getSquares();
 
-        final List<Fence> fences = game.getBoard().getFences();
+        final List<Fence> fences = game.getFences();
 
         verticalFences = fences.stream()
                 .filter(fence -> !fence.isHorizontal())

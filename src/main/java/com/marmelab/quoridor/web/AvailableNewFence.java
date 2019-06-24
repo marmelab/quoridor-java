@@ -1,6 +1,6 @@
 package com.marmelab.quoridor.web;
 
-import com.marmelab.quoridor.game.Fence;
+import com.marmelab.quoridor.model.Fence;
 import com.marmelab.quoridor.model.PositionTile;
 
 import java.util.ArrayList;
