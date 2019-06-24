@@ -1,6 +1,4 @@
-package com.marmelab.quoridor.game;
-
-import com.marmelab.quoridor.model.Position;
+package com.marmelab.quoridor.model;
 
 import java.util.Objects;
 

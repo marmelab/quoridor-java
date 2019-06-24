@@ -6,8 +6,8 @@ public class Pawn {
 
     private final Position position;
 
-    public Pawn(int x, int y) {
-        this(new Position(x, y));
+    public Pawn(int column, int row) {
+        this(new Position(column, row));
     }
 
     public Pawn(Position position) {

@@ -1,6 +1,7 @@
 package com.marmelab.quoridor.game;
 
 import com.marmelab.quoridor.model.Board;
+import com.marmelab.quoridor.model.Fence;
 import com.marmelab.quoridor.model.Pawn;
 import com.marmelab.quoridor.model.Position;
 
@@ -24,7 +25,7 @@ public class Game {
     }
 
     public void addFence(final Fence fence) {
-        board.addFence(fence);
+        board.addFence(fence, pawn);
     }
 
 }

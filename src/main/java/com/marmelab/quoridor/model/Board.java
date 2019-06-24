@@ -1,8 +1,9 @@
 package com.marmelab.quoridor.model;
 
-import com.marmelab.quoridor.game.Fence;
 import com.marmelab.quoridor.graph.GraphFactory;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.slf4j.Logger;
@@ -33,8 +34,8 @@ public class Board {
     public Board(int boardSize) {
         if (boardSize % 2 == 0) {
             throw new IllegalArgumentException("The size must be an odd number");
-        } else if (boardSize < 0) {
-            throw new IllegalArgumentException("The size must be positive");
+        } else if (boardSize < 3) {
+            throw new IllegalArgumentException("The size must be at least 3");
         }
         this.boardSize = boardSize;
         graph = GraphFactory.buildGrid(boardSize);
@@ -52,26 +53,39 @@ public class Board {
         return squares;
     }
 
-    public void addFence(final Fence fence) {
+    public void addFence(final Fence fence, final Pawn pawn) {
         final FenceBlock fenceBlock = new FenceBlock(fence.getNorthwestTile());
         final PositionTile positionTile = new PositionTile(fence.getNorthwestTile());
         if (hasAlreadyAFenceAtTheSamePosition(fence.getNorthwestTile()) || hasNeighbourFence(fence.isHorizontal(), positionTile)) {
             LOGGER.info("Intersection: {}", fence);
         } else {
-            addFence(fence, fenceBlock);
+            addFence(fence, fenceBlock, pawn);
         }
     }
 
-    private void addFence(final Fence fence, final FenceBlock fenceBlock) {
-        fences.add(new Fence(fence));
+    private void addFence(final Fence fence, final FenceBlock fenceBlock, final Pawn pawn) {
         if (fence.isHorizontal()) {
-            graph.removeEdge(fenceBlock.getNorthwestTile(), fenceBlock.getSouthwestTile());
-            graph.removeEdge(fenceBlock.getNortheastTile(), fenceBlock.getSoutheastTile());
+            final Edge westEdge = new Edge(fenceBlock.getNorthwestTile(), fenceBlock.getSouthwestTile());
+            final Edge eastEdge = new Edge(fenceBlock.getNortheastTile(), fenceBlock.getSoutheastTile());
+            addFence(fence, pawn, westEdge, eastEdge);
         } else {
-            graph.removeEdge(fenceBlock.getNorthwestTile(), fenceBlock.getNortheastTile());
-            graph.removeEdge(fenceBlock.getSouthwestTile(), fenceBlock.getSoutheastTile());
+            final Edge northEdge = new Edge(fenceBlock.getNorthwestTile(), fenceBlock.getNortheastTile());
+            final Edge southEdge = new Edge(fenceBlock.getSouthwestTile(), fenceBlock.getSoutheastTile());
+            addFence(fence, pawn, northEdge, southEdge);
         }
-        LOGGER.info("Added : {}", fence);
+    }
+
+    private void addFence(final Fence fence, final Pawn pawn, final Edge edge1, final Edge edge2) {
+        graph.removeEdge(edge1.getFirst(), edge1.getSecond());
+        graph.removeEdge(edge2.getFirst(), edge2.getSecond());
+        if (isCrossable(pawn)) {
+            fences.add(new Fence(fence));
+            LOGGER.info("Added: {}", fence);
+        } else {
+            graph.addEdge(edge1.getFirst(), edge1.getSecond());
+            graph.addEdge(edge2.getFirst(), edge2.getSecond());
+            LOGGER.info("No more access to goal line: {}", fence);
+        }
     }
 
     private boolean hasAlreadyAFenceAtTheSamePosition(final Position position) {
@@ -103,6 +117,19 @@ public class Board {
 
     public List<Fence> getFences() {
         return fences;
+    }
+
+    private boolean isCrossable(final Pawn pawn) {
+        final DijkstraShortestPath<Position, DefaultEdge> shortestPath = new DijkstraShortestPath<>(graph);
+        boolean crossable = false;
+        int column = boardSize - 1;
+        int row = 0;
+        while (!crossable && row < boardSize) {
+            GraphPath<Position, DefaultEdge> path = shortestPath.getPath(pawn.getPosition(), new Position(column, row));
+            crossable = path != null;
+            row++;
+        }
+        return crossable;
     }
 
 }

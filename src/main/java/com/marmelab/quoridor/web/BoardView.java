@@ -1,6 +1,6 @@
 package com.marmelab.quoridor.web;
 
-import com.marmelab.quoridor.game.Fence;
+import com.marmelab.quoridor.model.Fence;
 import com.marmelab.quoridor.game.Game;
 import com.marmelab.quoridor.model.Pawn;
 import com.marmelab.quoridor.model.Position;
