@@ -158,7 +158,7 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("It should not be possible to add an vertical fence before a vertical fence")
+    @DisplayName("It should not be possible to add a vertical fence before a vertical fence")
     void addFenceNotPossibleVerticalFenceBeforeVerticalFence() {
         // Given
         Board board = new Board(5);

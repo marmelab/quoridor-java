@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class Board {
 
@@ -54,48 +55,48 @@ public class Board {
     public void addFence(final Fence fence) {
         final FenceBlock fenceBlock = new FenceBlock(fence.getNorthwestTile());
         final PositionTile positionTile = new PositionTile(fence.getNorthwestTile());
-        if (fence.isHorizontal()) {
-            if (hasAlreadyAFenceAtTheSamePosition(fence.getNorthwestTile()) || hasHorizontalNeigbourFence(positionTile)) {
-                LOGGER.info("Intersection: {}", fence);
-            } else {
-                LOGGER.info("Added : {}", fence);
-                fences.add(new Fence(fence));
-                graph.removeEdge(fenceBlock.getNorthwestTile(), fenceBlock.getSouthwestTile());
-                graph.removeEdge(fenceBlock.getNortheastTile(), fenceBlock.getSoutheastTile());
-            }
+        if (hasAlreadyAFenceAtTheSamePosition(fence.getNorthwestTile()) || hasNeighbourFence(fence.isHorizontal(), positionTile)) {
+            LOGGER.info("Intersection: {}", fence);
         } else {
-            if (hasAlreadyAFenceAtTheSamePosition(fence.getNorthwestTile()) || hasVerticalNeigbourFence(positionTile)) {
-                LOGGER.info("Intersection: {}", fence);
-            } else {
-                LOGGER.info("Added : {}", fence);
-                fences.add(new Fence(fence));
-                graph.removeEdge(fenceBlock.getNorthwestTile(), fenceBlock.getNortheastTile());
-                graph.removeEdge(fenceBlock.getSouthwestTile(), fenceBlock.getSoutheastTile());
-            }
+            addFence(fence, fenceBlock);
         }
+    }
+
+    private void addFence(final Fence fence, final FenceBlock fenceBlock) {
+        fences.add(new Fence(fence));
+        if (fence.isHorizontal()) {
+            graph.removeEdge(fenceBlock.getNorthwestTile(), fenceBlock.getSouthwestTile());
+            graph.removeEdge(fenceBlock.getNortheastTile(), fenceBlock.getSoutheastTile());
+        } else {
+            graph.removeEdge(fenceBlock.getNorthwestTile(), fenceBlock.getNortheastTile());
+            graph.removeEdge(fenceBlock.getSouthwestTile(), fenceBlock.getSoutheastTile());
+        }
+        LOGGER.info("Added : {}", fence);
     }
 
     private boolean hasAlreadyAFenceAtTheSamePosition(final Position position) {
         final Optional<Fence> already = fences.stream()
-                .filter(fence -> fence.getNorthwestTile().equals(position))
+                .filter(
+                        fence -> fence.getNorthwestTile().equals(position))
                 .findFirst();
         return already.isPresent();
     }
 
-    private boolean hasHorizontalNeigbourFence(final PositionTile positionTile) {
+    private boolean hasNeighbourFence(final boolean isHorizontal, final PositionTile positionTile) {
+        final Predicate<Fence> neighbourPredicate;
+        if (isHorizontal) {
+            neighbourPredicate = fence -> fence.isHorizontal()
+                    && (fence.getNorthwestTile().equals(positionTile.getEastPosition())
+                    || fence.getNorthwestTile().equals(positionTile.getWestPosition())
+            );
+        } else {
+            neighbourPredicate = fence -> !fence.isHorizontal()
+                    && (fence.getNorthwestTile().equals(positionTile.getNorthPosition())
+                    || fence.getNorthwestTile().equals(positionTile.getSouthPosition())
+            );
+        }
         final Optional<Fence> exist = fences.stream()
-                .filter(fence -> fence.isHorizontal()
-                        && (fence.getNorthwestTile().equals(positionTile.getEastPosition()) ||
-                        fence.getNorthwestTile().equals(positionTile.getWestPosition())))
-                .findFirst();
-        return exist.isPresent();
-    }
-
-    private boolean hasVerticalNeigbourFence(final PositionTile positionTile) {
-        final Optional<Fence> exist = fences.stream()
-                .filter(fence -> !fence.isHorizontal()
-                        && (fence.getNorthwestTile().equals(positionTile.getNorthPosition()) ||
-                        fence.getNorthwestTile().equals(positionTile.getSouthPosition())))
+                .filter(neighbourPredicate)
                 .findFirst();
         return exist.isPresent();
     }
