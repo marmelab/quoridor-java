@@ -225,7 +225,7 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("It should be possible to add a fence which closes the access to the goal line")
+    @DisplayName("It should not be possible to add a fence which closes the access to the goal line")
     void addFenceNotCrossable() {
         // Given
         Board board = new Board(3);
