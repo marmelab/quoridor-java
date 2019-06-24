@@ -32,8 +32,8 @@ public class QuoridorEndpointTest {
 
         String content = quoridor.getResponse().getContentAsString();
         assertThat(content)
-                .contains("<div class=\"pawn\" style=\"top: 160px; left: 0px\">")
-                .contains("<div class=\"square\" style=\"top: 0px; left: 80px\"></div>");
+                .contains(" <div class=\"pawn\"\n")
+                .contains("<div class=\"square\"\n");
     }
 
 }

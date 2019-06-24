@@ -30,4 +30,5 @@ public class Pawn {
     public int hashCode() {
         return Objects.hash(position);
     }
+
 }

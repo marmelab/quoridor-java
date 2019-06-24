@@ -3,15 +3,59 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Welcome</title>
+    <title>Welcome to Quoridor</title>
     <link rel="stylesheet" type="text/css" th:href="@{/quoridor.css}" />
 </head>
 
 <body>
-    <div class="board">
-        <div th:each="square : ${squares}" class="square" th:style="${'top: ' + square.position.y * 40 + 'px; left: ' + square.position.x * 40 + 'px'}"></div>
-        <div class="pawn" th:style="${'top: ' + pawn.position.y * 40 + 'px; left: ' + pawn.position.x * 40 + 'px'}">
+    <div class="game">
+        <form method="post" action="/quoridor">
+            <button type="submit">New game</button>
+        </form>
+    </div>
+
+    <div class="board"
+        th:with="delta=${40}, squareSize=${30}">
+        <div th:each="square : ${squares}" class="square"
+            th:style="${'top: ' + square.row * delta + 'px; left: ' + square.column * delta + 'px'}"></div>
+        
+        <div class="pawn"
+            th:with="pos_x=${pawn.position.row * delta + 3}, pos_y=${pawn.position.column * delta + 3}"
+            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">
         </div>
+
+        <div th:each="fence: ${verticalFences}" class="fence vertical-fence"
+            th:with="pos_x=${fence.northwestTile.row * delta}, pos_y=${fence.northwestTile.column * delta + squareSize}"
+            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">
+        </div>
+
+        <div th:each="fence: ${horizontalFences}" class="fence horizontal-fence"
+            th:with="pos_x=${fence.northwestTile.row * delta + squareSize}, pos_y=${fence.northwestTile.column * delta}"
+            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">
+        </div>
+
+        <div th:each="addfence: ${addVerticalFences}" class="add-fence add-vertical-fence"
+            th:with="pos_x=${addfence.northwestTile.row * delta}, pos_y=${addfence.northwestTile.column * delta + squareSize}"
+            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">
+            <form method="post" action="/quoridor/add-fence">
+                <input type="hidden" name="row" th:value="*{addfence.northwestTile.row}">
+                <input type="hidden" name="column" th:value="*{addfence.northwestTile.column}">
+                <input type="hidden" name="horizontal" value="false">
+                <button type="submit" class="button vertical-button"></button>
+            </form>
+        </div>
+
+        <div th:each="addfence: ${addHorizontalFences}" class="add-fence add-horizontal-fence"
+            th:with="pos_x=${addfence.northwestTile.row * delta + squareSize}, pos_y=${addfence.northwestTile.column * delta}"
+            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">
+            <form method="post" action="/quoridor/add-fence" class="form-fence">
+                <input type="hidden" name="row" th:value="*{addfence.northwestTile.row}">
+                <input type="hidden" name="column" th:value="*{addfence.northwestTile.column}">
+                <input type="hidden" name="horizontal" value="true">
+                <button type="submit" class="button horizontal-button"></button>
+            </form>
+        </div>
+
     </div>
 </body>
 
