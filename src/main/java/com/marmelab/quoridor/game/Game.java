@@ -20,7 +20,7 @@ public class Game {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Game.class);
 
-    private final Pawn pawn;
+    private final List<Pawn> pawns;
 
     private final Board board;
 
@@ -30,21 +30,28 @@ public class Game {
 
     private boolean over;
 
+    private int playerTurn;
+
     public Game(final Board board) {
         this.board = board;
         int boardSize = this.board.getBoardSize();
-        pawn = new Pawn(new Position(0, (boardSize - 1) / 2));
+        int lineCenter = (boardSize - 1) / 2;
+        pawns = List.of(
+                new Pawn(new Position(0, lineCenter), CardinalDirection.WEST),
+                new Pawn(new Position(boardSize -1, lineCenter), CardinalDirection.EAST)
+        );
         graph = GraphFactory.buildGrid(boardSize);
         fences = new ArrayList<>();
         over = false;
+        playerTurn = 1;
     }
 
     public Board getBoard() {
         return board;
     }
 
-    public Pawn getPawn() {
-        return pawn;
+    public List<Pawn> getPawns() {
+        return pawns;
     }
 
     public List<Fence> getFences() {
@@ -62,37 +69,34 @@ public class Game {
         if (over) {
             throw new GameException("Game is over, unable to add a fence");
         }
-        addFence(fence, pawn);
-    }
-
-    private void addFence(final Fence fence, final Pawn pawn) {
         final FenceBlock fenceBlock = new FenceBlock(fence.getNorthwestTile());
         final PositionTile positionTile = new PositionTile(fence.getNorthwestTile());
         if (hasAlreadyAFenceAtTheSamePosition(fence.getNorthwestTile()) || hasNeighbourFence(fence.isHorizontal(), positionTile)) {
             LOGGER.info("Intersection: {}", fence);
         } else {
-            addFenceWithEdges(fence, fenceBlock, pawn);
+            addFenceWithEdges(fence, fenceBlock);
         }
     }
 
-    private void addFenceWithEdges(final Fence fence, final FenceBlock fenceBlock, final Pawn pawn) {
+    private void addFenceWithEdges(final Fence fence, final FenceBlock fenceBlock) {
         if (fence.isHorizontal()) {
             final Edge westEdge = new Edge(fenceBlock.getNorthwestTile(), fenceBlock.getSouthwestTile());
             final Edge eastEdge = new Edge(fenceBlock.getNortheastTile(), fenceBlock.getSoutheastTile());
-            addFenceIfCrossable(fence, pawn, westEdge, eastEdge);
+            addFenceIfCrossable(fence, westEdge, eastEdge);
         } else {
             final Edge northEdge = new Edge(fenceBlock.getNorthwestTile(), fenceBlock.getNortheastTile());
             final Edge southEdge = new Edge(fenceBlock.getSouthwestTile(), fenceBlock.getSoutheastTile());
-            addFenceIfCrossable(fence, pawn, northEdge, southEdge);
+            addFenceIfCrossable(fence, northEdge, southEdge);
         }
     }
 
-    private void addFenceIfCrossable(final Fence fence, final Pawn pawn, final Edge edge1, final Edge edge2) {
+    private void addFenceIfCrossable(final Fence fence, final Edge edge1, final Edge edge2) {
         graph.removeEdge(edge1.getFirst(), edge1.getSecond());
         graph.removeEdge(edge2.getFirst(), edge2.getSecond());
-        if (isCrossable(pawn)) {
+        if (isCrossableForAllPawns()) {
             fences.add(new Fence(fence));
             LOGGER.info("Added: {}", fence);
+            nextPlayer();
         } else {
             graph.addEdge(edge1.getFirst(), edge1.getSecond());
             graph.addEdge(edge2.getFirst(), edge2.getSecond());
@@ -127,10 +131,20 @@ public class Game {
         return exist.isPresent();
     }
 
+    private boolean isCrossableForAllPawns() {
+        boolean crossable = true;
+        final Iterator<Pawn> pawnIterator = pawns.iterator();
+        while (crossable && pawnIterator.hasNext()) {
+            Pawn next = pawnIterator.next();
+            crossable = isCrossable(next);
+        }
+        return crossable;
+    }
+
     private boolean isCrossable(final Pawn pawn) {
         final DijkstraShortestPath<Position, DefaultEdge> shortestPath = new DijkstraShortestPath<>(graph);
         boolean crossable = false;
-        int column = board.getBoardSize() - 1;
+        int column = pawn.getGoal() == CardinalDirection.WEST ? board.getBoardSize() - 1 : 0;
         int row = 0;
         while (!crossable && row < board.getBoardSize()) {
             GraphPath<Position, DefaultEdge> path = shortestPath.getPath(pawn.getPosition(), new Position(column, row));
@@ -144,6 +158,7 @@ public class Game {
         if (over) {
             throw new GameException("Game is over, unable to move a pawn");
         }
+        Pawn pawn = getTurnPawn();
         switch (direction) {
             case NORTH:
                 move(0, -1);
@@ -158,7 +173,7 @@ public class Game {
                 move(-1, 0);
                 break;
         }
-        over = isAVictory();
+        over = isAVictory(pawn);
     }
 
     private boolean canMove(final int position, final int row) {
@@ -166,20 +181,46 @@ public class Game {
         return newRow >= 0 && newRow < board.getBoardSize();
     }
 
-    private void move(int column, int row) {
-        final Position position = pawn.getPosition();
+    private void move(final int column, final int row) {
+        final Position position = getTurnPawn().getPosition();
         if (canMove(position.getColumn(), column) && canMove(position.getRow(), row)) {
             position.translateColumn(column);
             position.translateRow(row);
+            nextPlayer();
         }
     }
 
-    private boolean isAVictory() {
-        return pawn.getPosition().getColumn() == board.getBoardSize() - 1;
+    private boolean isAVictory(final Pawn pawn) {
+        boolean victory;
+        Position position = pawn.getPosition();
+        if (pawn.getGoal() == CardinalDirection.EAST) {
+            victory = position.getColumn() == 0;
+        } else if (pawn.getGoal() == CardinalDirection.WEST) {
+            victory = position.getColumn() == board.getBoardSize() -1;
+        } else {
+            throw new IllegalArgumentException("Goal direction not supported");
+        }
+        return victory;
     }
 
     public boolean isOver() {
         return over;
+    }
+
+    private void nextPlayer() {
+        if (playerTurn + 1 > pawns.size()) {
+            playerTurn = 1;
+        } else {
+            playerTurn++;
+        }
+    }
+
+    public Pawn getTurnPawn() {
+        return pawns.get(playerTurn -1);
+    }
+
+    public int getTurn() {
+        return playerTurn;
     }
 
 }

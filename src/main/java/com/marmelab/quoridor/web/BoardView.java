@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class BoardView {
 
-    private final Pawn pawn;
+    private final List<Pawn> pawns;
 
     private final List<Position> squares;
 
@@ -22,19 +22,18 @@ public class BoardView {
 
     private final Map<Position, CardinalDirection> possibleMoves;
 
-    public BoardView(final Game game) {
-        pawn = game.getPawn();
+    public BoardView(final Game game, final Pawn pawnTurn) {
+        pawns = game.getPawns();
         squares = game.getSquares();
 
         final List<Fence> fences = game.getFences();
-
         verticalFences = fences.stream()
                 .filter(fence -> !fence.isHorizontal())
                 .collect(Collectors.toList());
         horizontalFences = fences.stream()
                 .filter(Fence::isHorizontal)
                 .collect(Collectors.toList());
-        if (game.isOver()) {
+        if (pawnTurn == null) {
             addHorizontalFences = new ArrayList<>();
             addVerticalFences = new ArrayList<>();
             possibleMoves = new HashMap<>();
@@ -42,12 +41,12 @@ public class BoardView {
             AvailableNewFence availableNewFence = new AvailableNewFence(game.getBoard().getBoardSize(), horizontalFences, verticalFences);
             addHorizontalFences = availableNewFence.getAddHorizontalFences();
             addVerticalFences = availableNewFence.getAddVerticalFences();
-            possibleMoves = buildPossibleMoves(game.getBoard().getBoardSize());
+            possibleMoves = buildPossibleMoves(pawnTurn, game.getBoard().getBoardSize());
             squares.removeAll(possibleMoves.keySet());
         }
     }
 
-    private Map<Position, CardinalDirection> buildPossibleMoves(final int boardSize) {
+    private Map<Position, CardinalDirection> buildPossibleMoves(final Pawn pawn, final int boardSize) {
         Map<Position, CardinalDirection> possiblePositions = new HashMap<>();
         final Position position = pawn.getPosition();
         final PositionTile positionTile = new PositionTile(position);
@@ -78,8 +77,8 @@ public class BoardView {
         return position >= 0 && position < boardSize;
     }
 
-    public Pawn getPawn() {
-        return pawn;
+    public List<Pawn> getPawns() {
+        return pawns;
     }
 
     public List<Position> getSquares() {

@@ -12,20 +12,22 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class GameTest {
 
     @Test
-    @DisplayName("Create default game should place the pawn in the center of its base line")
-    public void newGamePlacesWellPawn() {
+    @DisplayName("Create default game should place the pawns in the center of its base line")
+    public void newGamePlacesWellPawns() {
         //Given
-        Pawn expected = new Pawn(0, 4);
+        List<Pawn> expected = List.of(
+                new Pawn(0, 4, CardinalDirection.EAST),
+                new Pawn(8, 4, CardinalDirection.WEST));
         Board board = new Board();
         //When
         Game game = new Game(board);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns()).isEqualTo(expected);
     }
 
     @Test
     @DisplayName("by default, no fences are on the board")
-    void constructorFences() {
+    public void constructorFences() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -37,7 +39,7 @@ public class GameTest {
 
     @Test
     @DisplayName("add the fence should add the fence at the right place")
-    void addFenceHappyPath() {
+    public void addFenceHappyPath() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -51,7 +53,7 @@ public class GameTest {
 
     @Test
     @DisplayName("it is not possible to add another fence at the same place")
-    void addFenceNotAthTheSamePlace() {
+    public void addFenceNotAthTheSamePlace() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -66,7 +68,7 @@ public class GameTest {
 
     @Test
     @DisplayName("get fences should return the right number of vertical fences")
-    void getFencesReturnsTheRightNumberOfVerticalFences() {
+    public void getFencesReturnsTheRightNumberOfVerticalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -82,7 +84,7 @@ public class GameTest {
 
     @Test
     @DisplayName("get fences should return the right number of horizontal fences")
-    void getFencesReturnsTheRightNumberOfHorizontalFences() {
+    public void getFencesReturnsTheRightNumberOfHorizontalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -98,7 +100,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence one square after a fence")
-    void addFenceNotPossibleHorizontalFenceNextSquare() {
+    public void addFenceNotPossibleHorizontalFenceNextSquare() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -113,7 +115,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a vertical fence one square after a fence")
-    void addFenceNotPossibleVerticalFenceNextFence() {
+    public void addFenceNotPossibleVerticalFenceNextFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -128,7 +130,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a vertical fence one horizontal fence")
-    void addFenceNotPossibleVerticalFenceOnHorizontalFence() {
+    public void addFenceNotPossibleVerticalFenceOnHorizontalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -143,7 +145,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence one vertical fence")
-    void addFenceNotPossibleHorizontalFenceOnVerticalFence() {
+    public void addFenceNotPossibleHorizontalFenceOnVerticalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -158,7 +160,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a vertical fence before a vertical fence")
-    void addFenceNotPossibleVerticalFenceBeforeVerticalFence() {
+    public void addFenceNotPossibleVerticalFenceBeforeVerticalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -173,7 +175,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence before a horizontal fence")
-    void addFenceNotPossibleHorizontalFenceBeforeHorizontalFence() {
+    public void addFenceNotPossibleHorizontalFenceBeforeHorizontalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -188,7 +190,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should be possible to add a vertical fence between two horizontal fences")
-    void addFenceBetweenTwoHorizontalFences() {
+    public void addFenceBetweenTwoHorizontalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -206,7 +208,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence between two vertical fences")
-    void addFenceBetweenTwoVerticalFences() {
+    public void addFenceBetweenTwoVerticalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -224,7 +226,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a fence which closes the access to the goal line")
-    void addFenceNotCrossable() {
+    public void addFenceNotCrossable() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -241,80 +243,80 @@ public class GameTest {
     @DisplayName("move east pawn should place the pawn in the column on the right")
     public void moveEastPawnPlacesWellPawn() {
         //Given
-        Pawn expected = new Pawn(1, 4);
+        Pawn expected = new Pawn(1, 4, CardinalDirection.EAST);
         Board board = new Board();
         Game game = new Game(board);
         //When
         game.movePawn(CardinalDirection.EAST);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns().get(0)).isEqualTo(expected);
     }
 
     @Test
     @DisplayName("move north pawn should place the pawn in the row on the top")
     public void moveNorthPawnPlacesWellPawn() {
         //Given
-        Pawn expected = new Pawn(0, 3);
+        Pawn expected = new Pawn(0, 3, CardinalDirection.EAST);
         Board board = new Board();
         Game game = new Game(board);
         //When
         game.movePawn(CardinalDirection.NORTH);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns().get(0)).isEqualTo(expected);
     }
 
     @Test
     @DisplayName("move south pawn should place the pawn down in the row on the bottom")
     public void moveSouthPawnPlacesWellPawn() {
         //Given
-        Pawn expected = new Pawn(0, 5);
+        Pawn expected = new Pawn(0, 5, CardinalDirection.EAST);
         Board board = new Board();
         Game game = new Game(board);
         //When
         game.movePawn(CardinalDirection.SOUTH);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns().get(0)).isEqualTo(expected);
     }
 
     @Test
     @DisplayName("move south pawn should place the pawn down in the row on the bottom")
     public void moveWestPawnPlacesWellPawn() {
         //Given
-        Pawn expected = new Pawn(0, 4);
+        Pawn expected = new Pawn(7, 4, CardinalDirection.WEST);
         Board board = new Board();
         Game game = new Game(board);
         game.movePawn(CardinalDirection.EAST);
         //When
         game.movePawn(CardinalDirection.WEST);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns().get(1)).isEqualTo(expected);
     }
 
     @Test
     @DisplayName("move pawn in a forbidden direction should not move pawn")
     public void moveForbiddenPawnPlacesNoMove() {
         //Given
-        Pawn expected = new Pawn(0, 4);
+        Pawn expected = new Pawn(0, 4, CardinalDirection.EAST);
         Board board = new Board();
         Game game = new Game(board);
         //When
         game.movePawn(CardinalDirection.WEST);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns().get(0)).isEqualTo(expected);
     }
 
     @Test
     @DisplayName("move pawn should cross fences")
     public void movePawnCrossFence() {
         //Given
-        Pawn expected = new Pawn(1, 4);
         Board board = new Board();
         Game game = new Game(board);
         game.addFence(new Fence(0, 4, false));
+        game.movePawn(CardinalDirection.SOUTH);
         //When
         game.movePawn(CardinalDirection.EAST);
         //Then
-        assertThat(game.getPawn()).isEqualTo(expected);
+        assertThat(game.getPawns().get(0)).isEqualTo(new Pawn(1, 4, CardinalDirection.EAST));
     }
 
     @Test
@@ -324,11 +326,12 @@ public class GameTest {
         Board board = new Board(3);
         Game game = new Game(board);
         game.movePawn(CardinalDirection.EAST);
+        game.movePawn(CardinalDirection.WEST);
         //When
         game.movePawn(CardinalDirection.EAST);
         //Then
         assertThat(game.isOver()).isTrue();
-        assertThat(game.getPawn()).isEqualTo(new Pawn(2, 1));
+        assertThat(game.getPawns().get(0)).isEqualTo(new Pawn(2, 1, CardinalDirection.EAST));
     }
 
     @Test
@@ -350,9 +353,10 @@ public class GameTest {
         Board board = new Board(3);
         Game game = new Game(board);
         game.movePawn(CardinalDirection.EAST);
+        game.movePawn(CardinalDirection.WEST);
         game.movePawn(CardinalDirection.EAST);
         //When
-        Throwable throwable = catchThrowable(() -> game.movePawn(CardinalDirection.EAST));
+        Throwable throwable = catchThrowable(() -> game.movePawn(CardinalDirection.WEST));
         //Then
         assertThat(throwable)
                 .isInstanceOf(GameException.class)
@@ -366,6 +370,7 @@ public class GameTest {
         Board board = new Board(3);
         Game game = new Game(board);
         game.movePawn(CardinalDirection.EAST);
+        game.movePawn(CardinalDirection.WEST);
         game.movePawn(CardinalDirection.EAST);
         //When
         Throwable throwable = catchThrowable(() -> game.addFence(new Fence(0, 0, false)));

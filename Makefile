@@ -9,16 +9,13 @@ clean: ## Clean the workspace
 	docker-compose run web gradle clean
 
 build: ## build server
-	docker-compose up
-
-start: ## start the server
-	docker-compose run web gradle bootRun
+	docker-compose run --rm web gradle assemble
 
 run: ## build and start the server
-	docker-compose run web gradle build bootRun
+	docker-compose up
 
 test: ## Run the tests
-	docker-compose run web gradle test
+	docker-compose run --rm web gradle check
 
 coverage: ## Calculate the code coverage
 	docker-compose run web gradle jacocoTestReport
