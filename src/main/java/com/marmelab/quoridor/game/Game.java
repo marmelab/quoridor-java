@@ -59,9 +59,10 @@ public class Game {
     }
 
     public void addFence(final Fence fence) {
-        if (!over) {
-            addFence(fence, pawn);
+        if (over) {
+            throw new GameException("Game is over, unable to add a fence");
         }
+        addFence(fence, pawn);
     }
 
     private void addFence(final Fence fence, final Pawn pawn) {
@@ -141,7 +142,7 @@ public class Game {
 
     public void movePawn(final CardinalDirection direction) {
         if (over) {
-            return;
+            throw new GameException("Game is over, unable to move a pawn");
         }
         switch (direction) {
             case NORTH:

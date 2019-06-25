@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class GameTest {
 
@@ -351,10 +352,11 @@ public class GameTest {
         game.movePawn(CardinalDirection.EAST);
         game.movePawn(CardinalDirection.EAST);
         //When
-        game.movePawn(CardinalDirection.EAST);
+        Throwable throwable = catchThrowable(() -> game.movePawn(CardinalDirection.EAST));
         //Then
-        assertThat(game.isOver()).isTrue();
-        assertThat(game.getPawn()).isEqualTo(new Pawn(2, 1));
+        assertThat(throwable)
+                .isInstanceOf(GameException.class)
+                .hasMessage("Game is over, unable to move a pawn");
     }
 
     @Test
@@ -366,10 +368,11 @@ public class GameTest {
         game.movePawn(CardinalDirection.EAST);
         game.movePawn(CardinalDirection.EAST);
         //When
-        game.addFence(new Fence(0, 0, false));
+        Throwable throwable = catchThrowable(() -> game.addFence(new Fence(0, 0, false)));
         //Then
-        assertThat(game.isOver()).isTrue();
-        assertThat(game.getFences()).isEmpty();
+        assertThat(throwable)
+                .isInstanceOf(GameException.class)
+                .hasMessage("Game is over, unable to add a fence");
     }
 
 }
