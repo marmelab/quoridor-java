@@ -32,6 +32,9 @@ public class QuoridorEndpoint {
         model.addAttribute("horizontalFences", view.getHorizontalFences());
         model.addAttribute("addVerticalFences", view.getAddVerticalFences());
         model.addAttribute("addHorizontalFences", view.getAddHorizontalFences());
+        if (game.isOver()) {
+            model.addAttribute("victory", "You won");
+        }
         // return the name of the thymeleaf template
         return "quoridor";
     }

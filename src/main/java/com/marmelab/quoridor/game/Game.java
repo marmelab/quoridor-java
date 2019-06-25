@@ -28,12 +28,15 @@ public class Game {
 
     private final Graph<Position, DefaultEdge> graph;
 
+    private boolean over;
+
     public Game(final Board board) {
         this.board = board;
         int boardSize = this.board.getBoardSize();
         pawn = new Pawn(new Position(0, (boardSize - 1) / 2));
         graph = GraphFactory.buildGrid(boardSize);
         fences = new ArrayList<>();
+        over = false;
     }
 
     public Board getBoard() {
@@ -56,6 +59,9 @@ public class Game {
     }
 
     public void addFence(final Fence fence) {
+        if (over) {
+            throw new GameException("Game is over, unable to add a fence");
+        }
         addFence(fence, pawn);
     }
 
@@ -135,6 +141,9 @@ public class Game {
     }
 
     public void movePawn(final CardinalDirection direction) {
+        if (over) {
+            throw new GameException("Game is over, unable to move a pawn");
+        }
         switch (direction) {
             case NORTH:
                 move(0, -1);
@@ -149,6 +158,7 @@ public class Game {
                 move(-1, 0);
                 break;
         }
+        over = isAVictory();
     }
 
     private boolean canMove(final int position, final int row) {
@@ -162,6 +172,14 @@ public class Game {
             position.translateColumn(column);
             position.translateRow(row);
         }
+    }
+
+    private boolean isAVictory() {
+        return pawn.getPosition().getColumn() == board.getBoardSize() - 1;
+    }
+
+    public boolean isOver() {
+        return over;
     }
 
 }

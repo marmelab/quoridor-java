@@ -3,9 +3,7 @@ package com.marmelab.quoridor.web;
 import com.marmelab.quoridor.model.*;
 import com.marmelab.quoridor.game.Game;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BoardView {
@@ -36,13 +34,17 @@ public class BoardView {
         horizontalFences = fences.stream()
                 .filter(Fence::isHorizontal)
                 .collect(Collectors.toList());
-        AvailableNewFence availableNewFence = new AvailableNewFence(game.getBoard().getBoardSize(), horizontalFences, verticalFences);
-
-        addHorizontalFences = availableNewFence.getAddHorizontalFences();
-        addVerticalFences = availableNewFence.getAddVerticalFences();
-
-        possibleMoves = buildPossibleMoves(game.getBoard().getBoardSize());
-        squares.removeAll(possibleMoves.entrySet());
+        if (game.isOver()) {
+            addHorizontalFences = new ArrayList<>();
+            addVerticalFences = new ArrayList<>();
+            possibleMoves = new HashMap<>();
+        } else {
+            AvailableNewFence availableNewFence = new AvailableNewFence(game.getBoard().getBoardSize(), horizontalFences, verticalFences);
+            addHorizontalFences = availableNewFence.getAddHorizontalFences();
+            addVerticalFences = availableNewFence.getAddVerticalFences();
+            possibleMoves = buildPossibleMoves(game.getBoard().getBoardSize());
+            squares.removeAll(possibleMoves.keySet());
+        }
     }
 
     private Map<Position, CardinalDirection> buildPossibleMoves(final int boardSize) {
