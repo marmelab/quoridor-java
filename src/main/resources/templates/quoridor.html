@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>Welcome to Quoridor</title>
     <link rel="stylesheet" type="text/css" th:href="@{/quoridor.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/fireworks.css}" />
 </head>
 
 <body>
@@ -19,7 +20,7 @@
         <div th:each="square : ${squares}" class="square"
             th:style="${'top: ' + square.row * delta + 'px; left: ' + square.column * delta + 'px'}"></div>
 
-        <div th:each="instance : ${possibleMoves}" class="square move-square"
+        <div th:each="instance : ${possibleMoves}" class="square"
              th:style="${'top: ' + instance.key.row * delta + 'px; left: ' + instance.key.column * delta + 'px'}">
             <form method="post" action="/quoridor/move-pawn">
                 <input type="hidden" name="direction" th:value="*{instance.value}">
@@ -64,6 +65,12 @@
             </form>
         </div>
 
+    </div>
+
+    <div class="pyro" th:if="${victory}">
+        <div class="before"></div>
+        <div class="after"></div>
+        <span th:text="${victory}" class="message"></span>
     </div>
 </body>
 

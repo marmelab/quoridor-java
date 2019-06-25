@@ -316,4 +316,60 @@ public class GameTest {
         assertThat(game.getPawn()).isEqualTo(expected);
     }
 
+    @Test
+    @DisplayName("move pawn should finish the game it arrives at his goal line")
+    public void isOverWhenPawnArrivesGoalLinePawnCrossFence() {
+        //Given
+        Board board = new Board(3);
+        Game game = new Game(board);
+        game.movePawn(CardinalDirection.EAST);
+        //When
+        game.movePawn(CardinalDirection.EAST);
+        //Then
+        assertThat(game.isOver()).isTrue();
+        assertThat(game.getPawn()).isEqualTo(new Pawn(2, 1));
+    }
+
+    @Test
+    @DisplayName("move pawn should not finish the game it does not arrive at his goal line")
+    public void isNotOver() {
+        //Given
+        Board board = new Board(3);
+        Game game = new Game(board);
+        //When
+        game.movePawn(CardinalDirection.EAST);
+        //Then
+        assertThat(game.isOver()).isFalse();
+    }
+
+    @Test
+    @DisplayName("move pawn should finish the game no more move")
+    public void isOverNoMoreMove() {
+        //Given
+        Board board = new Board(3);
+        Game game = new Game(board);
+        game.movePawn(CardinalDirection.EAST);
+        game.movePawn(CardinalDirection.EAST);
+        //When
+        game.movePawn(CardinalDirection.EAST);
+        //Then
+        assertThat(game.isOver()).isTrue();
+        assertThat(game.getPawn()).isEqualTo(new Pawn(2, 1));
+    }
+
+    @Test
+    @DisplayName("move pawn should finish the game no more fence addition")
+    public void isOverNoMoreFenceAddition() {
+        //Given
+        Board board = new Board(3);
+        Game game = new Game(board);
+        game.movePawn(CardinalDirection.EAST);
+        game.movePawn(CardinalDirection.EAST);
+        //When
+        game.addFence(new Fence(0, 0, false));
+        //Then
+        assertThat(game.isOver()).isTrue();
+        assertThat(game.getFences()).isEmpty();
+    }
+
 }

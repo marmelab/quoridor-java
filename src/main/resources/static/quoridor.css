@@ -126,16 +126,12 @@
     transition: opacity ease-in-out 500ms;
 }
 
-.move-square {
+.message {
     position: absolute;
-    opacity: 0;
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-}
-
-.move-square:hover {
-    background-color: #4CAF50;
-    opacity: 1;
-    transition: opacity ease-in-out 500ms;
+    top: 0px;
+    left: 200px;
+    font-size: 20px;
+    color: #4CAF50;
+    padding: 10px 32px;
+    font-weight: bold;
 }
