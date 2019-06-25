@@ -6,16 +6,23 @@ public class Pawn {
 
     private final Position position;
 
-    public Pawn(int column, int row) {
-        this(new Position(column, row));
+    private final CardinalDirection goal;
+
+    public Pawn(int column, int row, CardinalDirection goal) {
+        this(new Position(column, row), goal);
     }
 
-    public Pawn(Position position) {
+    public Pawn(Position position, final CardinalDirection goal) {
         this.position = position;
+        this.goal = goal;
     }
 
     public Position getPosition() {
         return position;
+    }
+
+    public CardinalDirection getGoal() {
+        return goal;
     }
 
     @Override

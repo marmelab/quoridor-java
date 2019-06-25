@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="5" >
     <title>Welcome to Quoridor</title>
     <link rel="stylesheet" type="text/css" th:href="@{/quoridor.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/fireworks.css}" />
@@ -29,8 +30,10 @@
         </div>
 
         <div class="pawn"
+            th:each="pawn, iStat: ${pawns}"
             th:with="pos_x=${pawn.position.row * delta + 3}, pos_y=${pawn.position.column * delta + 3}"
-            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}">
+            th:style="${'top: ' + pos_x + 'px; left: ' + pos_y + 'px'}"
+            th:classappend="${iStat.index == 0} ? first-pawn : second-pawn">
         </div>
 
         <div th:each="fence: ${verticalFences}" class="fence vertical-fence"
@@ -67,10 +70,21 @@
 
     </div>
 
+    <div th:if="${waiting}">
+        <span th:text="${waiting}" class="message"></span>
+    </div>
+
     <div class="pyro" th:if="${victory}">
         <div class="before"></div>
         <div class="after"></div>
         <span th:text="${victory}" class="message"></span>
+    </div>
+
+    <div th:if="${turn}">
+        <span th:text="${turn}" class="message"></span>
+        <div class="pawn turn-pawn"
+            th:classappend="${player == 1} ? first-pawn : second-pawn">
+        </div>
     </div>
 </body>
 

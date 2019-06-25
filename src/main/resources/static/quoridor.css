@@ -22,6 +22,14 @@
     box-sizing: border-box;
 }
 
+.first-pawn {
+    border-bottom: 24px solid red;
+}
+
+.second-pawn {
+    border-bottom: 24px solid blue;
+}
+
 .fence {
     position: absolute;
     background-color: #CD853F;
@@ -134,4 +142,9 @@
     color: #4CAF50;
     padding: 10px 32px;
     font-weight: bold;
+}
+
+.turn-pawn {
+    top: 10px;
+    left: 305px;
 }
