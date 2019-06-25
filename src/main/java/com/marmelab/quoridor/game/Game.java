@@ -155,25 +155,22 @@ public class Game {
     }
 
     public void movePawn(final CardinalDirection direction) {
-        movePawn(getTurnPawn(), direction);
-    }
-
-    private void movePawn(final Pawn pawn, final CardinalDirection direction) {
         if (over) {
             throw new GameException("Game is over, unable to move a pawn");
         }
+        Pawn pawn = getTurnPawn();
         switch (direction) {
             case NORTH:
-                move(pawn, 0, -1);
+                move(0, -1);
                 break;
             case EAST:
-                move(pawn, 1, 0);
+                move(1, 0);
                 break;
             case SOUTH:
-                move(pawn, 0, 1);
+                move(0, 1);
                 break;
             case WEST:
-                move(pawn, -1, 0);
+                move(-1, 0);
                 break;
         }
         over = isAVictory(pawn);
@@ -184,8 +181,8 @@ public class Game {
         return newRow >= 0 && newRow < board.getBoardSize();
     }
 
-    private void move(final Pawn pawn, final int column, final int row) {
-        final Position position = pawn.getPosition();
+    private void move(final int column, final int row) {
+        final Position position = getTurnPawn().getPosition();
         if (canMove(position.getColumn(), column) && canMove(position.getRow(), row)) {
             position.translateColumn(column);
             position.translateRow(row);

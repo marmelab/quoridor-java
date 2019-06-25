@@ -27,7 +27,7 @@ public class GameTest {
 
     @Test
     @DisplayName("by default, no fences are on the board")
-    void constructorFences() {
+    public void constructorFences() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -39,7 +39,7 @@ public class GameTest {
 
     @Test
     @DisplayName("add the fence should add the fence at the right place")
-    void addFenceHappyPath() {
+    public void addFenceHappyPath() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -53,7 +53,7 @@ public class GameTest {
 
     @Test
     @DisplayName("it is not possible to add another fence at the same place")
-    void addFenceNotAthTheSamePlace() {
+    public void addFenceNotAthTheSamePlace() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
@@ -68,7 +68,7 @@ public class GameTest {
 
     @Test
     @DisplayName("get fences should return the right number of vertical fences")
-    void getFencesReturnsTheRightNumberOfVerticalFences() {
+    public void getFencesReturnsTheRightNumberOfVerticalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -84,7 +84,7 @@ public class GameTest {
 
     @Test
     @DisplayName("get fences should return the right number of horizontal fences")
-    void getFencesReturnsTheRightNumberOfHorizontalFences() {
+    public void getFencesReturnsTheRightNumberOfHorizontalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -100,7 +100,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence one square after a fence")
-    void addFenceNotPossibleHorizontalFenceNextSquare() {
+    public void addFenceNotPossibleHorizontalFenceNextSquare() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -115,7 +115,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a vertical fence one square after a fence")
-    void addFenceNotPossibleVerticalFenceNextFence() {
+    public void addFenceNotPossibleVerticalFenceNextFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -130,7 +130,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a vertical fence one horizontal fence")
-    void addFenceNotPossibleVerticalFenceOnHorizontalFence() {
+    public void addFenceNotPossibleVerticalFenceOnHorizontalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -145,7 +145,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence one vertical fence")
-    void addFenceNotPossibleHorizontalFenceOnVerticalFence() {
+    public void addFenceNotPossibleHorizontalFenceOnVerticalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -160,7 +160,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a vertical fence before a vertical fence")
-    void addFenceNotPossibleVerticalFenceBeforeVerticalFence() {
+    public void addFenceNotPossibleVerticalFenceBeforeVerticalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -175,7 +175,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence before a horizontal fence")
-    void addFenceNotPossibleHorizontalFenceBeforeHorizontalFence() {
+    public void addFenceNotPossibleHorizontalFenceBeforeHorizontalFence() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -190,7 +190,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should be possible to add a vertical fence between two horizontal fences")
-    void addFenceBetweenTwoHorizontalFences() {
+    public void addFenceBetweenTwoHorizontalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -208,7 +208,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add an horizontal fence between two vertical fences")
-    void addFenceBetweenTwoVerticalFences() {
+    public void addFenceBetweenTwoVerticalFences() {
         // Given
         Board board = new Board(5);
         Game game = new Game(board);
@@ -226,7 +226,7 @@ public class GameTest {
 
     @Test
     @DisplayName("It should not be possible to add a fence which closes the access to the goal line")
-    void addFenceNotCrossable() {
+    public void addFenceNotCrossable() {
         // Given
         Board board = new Board(3);
         Game game = new Game(board);
